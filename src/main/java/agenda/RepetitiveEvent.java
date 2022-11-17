@@ -1,5 +1,7 @@
 package agenda;
 
+//import jdk.vm.ci.meta.Local;
+
 import java.util.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -21,10 +23,11 @@ public class RepetitiveEvent extends Event {
      * <LI>ChronoUnit.MONTHS for monthly repetitions</LI>
      * </UL>
      */
+    private final ChronoUnit frequency;
+    private final Set<LocalDate> exceptions = new TreeSet<>();
     public RepetitiveEvent(String title, LocalDateTime start, Duration duration, ChronoUnit frequency) {
         super(title, start, duration);
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.frequency = frequency;
     }
 
     /**
@@ -33,8 +36,7 @@ public class RepetitiveEvent extends Event {
      * @param date the event will not occur at this date
      */
     public void addException(LocalDate date) {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");
+        this.exceptions.add(date);
     }
 
     /**
@@ -42,8 +44,29 @@ public class RepetitiveEvent extends Event {
      * @return the type of repetition
      */
     public ChronoUnit getFrequency() {
-        // TODO : implémenter cette méthode
-        throw new UnsupportedOperationException("Pas encore implémenté");    
+        return frequency;
+    }
+
+    public Set<LocalDate> getExceptions() {
+        return exceptions;
+    }
+    @Override
+    public boolean isInDay(LocalDate aDay) {
+        boolean isInDay = false;
+        LocalDate dateOccurence=super.getStart().toLocalDate();
+        do {
+            if (exceptions.contains(aDay)) {isInDay=false;
+                break;
+            }
+            LocalDate debut=dateOccurence;
+            LocalDate fin = debut.plusDays(super.getDuration().toDays());
+            isInDay = ((aDay.isEqual(debut))||(aDay.isEqual(fin))) || (aDay.isAfter(debut) && aDay.isBefore(fin));
+            dateOccurence= dateOccurence.plusDays(getFrequency().getDuration().toDays());
+
+        }
+        while(ChronoUnit.DAYS.between(dateOccurence,aDay) >= 0);
+
+        return isInDay;
     }
 
 }
