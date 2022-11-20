@@ -53,5 +53,18 @@ public class AgendaTest {
         assertTrue(agenda.eventsInDay(nov_1_2020).contains(neverEnding));
     }
 
+    @Test
+    void testFindEventByTitle() {
+        assertEquals(2, agenda.findByTitle("Fixed termination weekly").size(), "Il y a deux évènements qui conrespondent");
+        assertTrue(agenda.findByTitle("Fixed termination weekly").contains(fixedTermination));
+        assertTrue(agenda.findByTitle("Fixed termination weekly").contains(fixedRepetitions));
+    }
+    @Test
+    void testIsFreeFor() {
+        assertFalse(agenda.isFreeFor(simple));
+        assertFalse(agenda.isFreeFor(fixedTermination));
+        assertFalse(agenda.isFreeFor(fixedRepetitions));
+        assertFalse(agenda.isFreeFor(neverEnding));
+    }
 
 }

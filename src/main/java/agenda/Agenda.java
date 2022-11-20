@@ -42,4 +42,15 @@ public class Agenda {
         return events;
     }
 
+    public boolean isFreeFor(Event e) {
+        boolean isFree = true;
+        for(Event event: listeEvent) {
+            if(event.coincides(e)){
+                isFree = false;
+                break;
+            }
+        }
+        return isFree;
+    }
+
 }

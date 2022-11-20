@@ -46,6 +46,13 @@ public class Event {
        rep = ((aDay.isEqual(debut))||(aDay.isEqual(fin))) || (aDay.isAfter(debut) && aDay.isBefore(fin));
         return rep;
     }
+
+    public boolean coincides(Event other) {
+        LocalDateTime myEnd = this.getEnd();
+        LocalDateTime otherStart = other.getStart();
+        LocalDateTime otherEnd = other.getEnd();
+        return  otherStart.isAfter(myStart) && otherEnd.isBefore(myEnd) || (otherStart.isEqual(myStart) || otherEnd.isEqual(myEnd));
+    }
    
     /**
      * @return the myTitle
@@ -67,6 +74,9 @@ public class Event {
     public LocalDateTime getStart() {
         return myStart;
     }
+
+
+    public LocalDateTime getEnd() { return myStart.plus(myDuration); }
 
 
     /**
